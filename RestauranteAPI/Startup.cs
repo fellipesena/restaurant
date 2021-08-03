@@ -34,7 +34,7 @@ namespace RestauranteAPI
         {
             services.AddDbContext<RestauranteContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("Default"));
+                options.UseSqlServer(Configuration.GetConnectionString("Restaurante"));
             });
             services.AddTransient<IUnitOfWork>(x => new UnitOfWork(Configuration));
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);

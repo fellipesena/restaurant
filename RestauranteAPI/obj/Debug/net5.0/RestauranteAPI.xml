@@ -130,7 +130,7 @@
             <param name="idGarcom"></param>
             <param name="numeroMesa"></param>
             <response code="200">Pedido efetuado com sucesso</response>
-            <response code="404">Falha ao processar pedido</response>
+            <response code="400">Falha ao processar pedido</response>
         </member>
     </members>
 </doc>
