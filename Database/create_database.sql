@@ -1,0 +1,51 @@
+CREATE TABLE mesa
+(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	numero INT NOT NULL,
+	disponivel BIT
+)
+
+CREATE TABLE conta
+(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	id_mesa INT FOREIGN KEY REFERENCES mesa(id),
+	status VARCHAR(15) NOT NULL,
+	valor MONEY NOT NULL
+)
+
+CREATE TABLE garcom
+(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	nome VARCHAR(100) NOT NULL
+)
+
+CREATE TABLE item
+(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	nome VARCHAR(100) NOT NULL,
+	descricao VARCHAR(200),
+	tipo VARCHAR(15) NOT NULL,
+	valor MONEY NOT NULL,
+	qtd_estoque INT NOT NULL
+)
+
+CREATE TABLE pedido
+(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	id_mesa INT FOREIGN KEY REFERENCES mesa(id),
+	id_conta INT FOREIGN KEY REFERENCES conta(id),
+	id_garcom INT FOREIGN KEY REFERENCES garcom(id),
+	horario DATETIME NOT NULL,
+	valor MONEY NOT NULL
+)
+
+CREATE TABLE itens_pedido
+(
+	id INT PRIMARY KEY IDENTITY(1,1),
+	id_pedido INT FOREIGN KEY REFERENCES pedido(id),
+	id_item INT FOREIGN KEY REFERENCES item(id),
+	quantidade INT NOT NULL,
+	valor_unitario MONEY NOT NULL,
+	valor_total MONEY NOT NULL,
+	observacao VARCHAR(200)
+)
