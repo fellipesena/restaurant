@@ -19,3 +19,6 @@ Vale ressaltar que há controle de estoque, ou seja, ao efetuar um pedido, a qua
 O valor do item no momento do pedido é armazenado, e caso o mesmo item sofra um ajuste de preço em outro momento, o valor unitário utilizado para o fechamento da conta é o mesmo do momento em que foi realizado o pedido, fazendo com que não hajam surpresas no valor total do fechamento da conta.
 
 O banco de dados foi criado utilizando SQL, o arquivo para criação está em Database/create_database.sql
+
+Diagrama do Banco de Dados:
+![image](https://user-images.githubusercontent.com/42729316/128185865-2a4ef67a-8e64-4649-8ff6-91936ed654c4.png)
