@@ -1,7 +1,5 @@
 # restauranteapi
 
-# Ideia:
-
 A ideia é uma API de um Restaurante, onde é possível ter o controle de estoque dos itens, abertura e fechamento de contas e também o controle financeiro dos pedidos.
 
 Para isso, alguns requisitos foram levantados:
