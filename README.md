@@ -1,24 +1,22 @@
-# restauranteapi
+# restaurant
 
-A ideia é uma API de um Restaurante, onde é possível ter o controle de estoque dos itens, abertura e fechamento de contas e também o controle financeiro dos pedidos.
+## Restaurant.API
+An API where is possible to control stock, items, tables, waiters, open and close bills, and orders financial control. 
 
-Para isso, alguns requisitos foram levantados:
-- Garçons: Adicionar, remover e visualizar todos;
-- Mesas: Adicionar, remover, visualizar todas, visualizar pelo número e visualizar todas disponíveis;
-- Item: Adicionar, remover, atualizar, visualizar todos e visualizar pelo ID;
-- Conta: Adicionar (iniciar), atualizar (finalizar), visualizar pelo número da mesa;
-- Pedido: Adicionar (iniciar pedido);
+Base CRUD:
+- Waiters: Create, delete and get all;
+- Tables: Create, delete, get all, get by number and get all availables;
+- Item: Create, delete, update, get all and get by id;
+- Bill: Create (open a new one), update (close), get by table number;
+- Order: Create;
 
-O passo a passo do funcionamento é:
-- Criar um ou mais item, mesa e garçom;
-- Iniciar uma nova conta para uma mesa;
-- Efetuar um pedido utilizando os itens criados;
+Special Behaviors:
+- If try to create a new order with an item that does not have the quantity in stock, the order is not created;
+- When a new bill is created to a table, the new table status is unavailable, so we cant have two bills to same table;
+- When closes a bill, the total bill value considers item value at moment when create the order, so if change item value when have open bill the final value will not change.
 
-Vale ressaltar que há controle de estoque, ou seja, ao efetuar um pedido, a quantidade de itens no estoque diminui, e caso não tenha mais em estoque, o pedido não é realizado. Outro ponto importante é a disponibilidade da mesa, caso tenha uma conta em aberto para uma mesa, a mesma é dada como indisponível, ou seja, não é possível ter duas contas para uma mesma mesa no mesmo tempo.
+## Restaurant.Database
+Created using SQLServer and DbUp to version control (migrations).
 
-O valor do item no momento do pedido é armazenado, e caso o mesmo item sofra um ajuste de preço em outro momento, o valor unitário utilizado para o fechamento da conta é o mesmo do momento em que foi realizado o pedido, fazendo com que não hajam surpresas no valor total do fechamento da conta.
-
-O banco de dados foi criado utilizando SQL, o arquivo para criação está em Database/create_database.sql
-
-Diagrama do Banco de Dados:
+Database diagram (in portuguese for while):
 ![image](https://user-images.githubusercontent.com/42729316/128185865-2a4ef67a-8e64-4649-8ff6-91936ed654c4.png)
