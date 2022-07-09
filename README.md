@@ -19,4 +19,6 @@ Special Behaviors:
 Created using SQLServer and DbUp to version control (migrations).
 
 Database diagram:
-![image](![image](https://user-images.githubusercontent.com/42729316/178124341-147c5cca-045f-4290-8ce4-35da8d2a2edb.png))
+![image](https://user-images.githubusercontent.com/42729316/178124351-4dff2281-08dd-4657-b64e-9caf62d8efed.png)
+
+
