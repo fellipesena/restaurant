@@ -2,7 +2,7 @@
 
 namespace RestauranteAPI.Context.Core.Repositories
 {
-    public interface IItemRepository : IRepository<Item>
+    public interface IOrderRepository : IRepository<Order>
     {
 
     }

@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RestauranteAPI.Context.Core;
 using RestauranteAPI.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace RestauranteAPI.Controllers
 {
@@ -14,55 +12,36 @@ namespace RestauranteAPI.Controllers
     {
         private readonly IUnitOfWork _uow;
 
-        public ItemController(IUnitOfWork uow)
-        {
-            _uow = uow;
-        }
+        public ItemController(IUnitOfWork uow) => _uow = uow;
 
         /// <summary>
-        /// Visualizar todos os itens
+        /// Get all items
         /// </summary>
-        /// <response code="200">Lista com todos os itens</response>
-        /// <response code="404">Nenhum item cadastrado</response>
+        /// <response code="200">List with all items</response>
         [HttpGet]
-        public ActionResult<IEnumerable<Item>> GetItens()
-        {
-            var itens = _uow.Itens.GetAll();
-
-            if (itens.Count() == 0)
-            {
-                return NotFound("Ainda não há itens cadastrados");
-            }
-
-            return itens.ToList();
-        }
+        public ActionResult<IEnumerable<Item>> GetItens() => _uow.Items.GetAll().ToList();
 
         /// <summary>
-        /// Visualizar item pelo ID
+        /// Get item by id
         /// </summary>
-        /// <response code="200">Item de acordo com o ID</response>
-        /// <response code="404">Nenhum item encontrado</response>
+        /// <response code="200">Return item by id successfully</response>
+        /// <response code="400">Invalid item id</response>
         [HttpGet("{id}")]
         public ActionResult<Item> GetItem(int id)
         {
-            var item = _uow.Itens.Get(id);
+            Item item = _uow.Items.Get(id);
 
-            if(item == null)
-            {
-                return NotFound("Nenhum item encontrado com o ID inserido");
-            }
-
-            return item;
+            return item == null ? BadRequest($"Has no item with id {id}") : item;
         }
 
         /// <summary>
-        /// Criar um novo item
+        /// Create new item
         /// </summary>
-        /// <response code="200">Item criado com sucesso</response>
+        /// <response code="200">Item created successfully</response>
         [HttpPost]
         public ActionResult<Item> PostItem(Item item)
         {
-            _uow.Itens.Add(item);
+            _uow.Items.Add(item);
 
             _uow.Complete();
 
@@ -70,23 +49,23 @@ namespace RestauranteAPI.Controllers
         }
 
         /// <summary>
-        /// Atualizar um item pelo ID
+        /// Update a item by id
         /// </summary>
-        /// <response code="200">Item atualizado com sucesso</response>
-        /// <response code="404">Nenhum item encontrado</response>
+        /// <response code="200">Item updated successfully</response>
+        /// <response code="400">Invalid item id</response>
         [HttpPut("{id}")]
         public ActionResult<Item> PutItem(int id, Item item)
         {
-            var itemExiste = _uow.Itens.Get(id);
-            if(itemExiste == null)
+            Item actualItem = _uow.Items.Get(id);
+            if (actualItem == null)
             {
-                return NotFound("Nenhum item encontrado com o ID inserido");
+                return BadRequest($"Has no item with id {id}");
             }
-            itemExiste.Nome = item.Nome;
-            itemExiste.Descricao = item.Descricao;
-            itemExiste.Tipo = item.Tipo;
-            itemExiste.Valor = item.Valor;
-            itemExiste.QtdEstoque = item.QtdEstoque;
+            actualItem.Name = item.Name;
+            actualItem.Description = item.Description;
+            actualItem.Type = item.Type;
+            actualItem.Value = item.Value;
+            actualItem.StockQuantity = item.StockQuantity;
 
             _uow.Complete();
 
@@ -94,21 +73,21 @@ namespace RestauranteAPI.Controllers
         }
 
         /// <summary>
-        /// Deletar um item pelo ID
+        /// Delete item by id
         /// </summary>
-        /// <response code="200">Item deletado com sucesso</response>
-        /// <response code="404">Nenhum item encontrado</response>
+        /// <response code="200">Item deleted successfully</response>
+        /// <response code="400">Invalid item id</response>
         [HttpDelete]
         public ActionResult DeleteItem(int id)
         {
-            var item = _uow.Itens.Get(id);
+            Item item = _uow.Items.Get(id);
 
             if (item == null)
             {
-                return NotFound("Nenhum item encontrado com o ID inserido");
+                return BadRequest($"Has no item with id {id}");
             }
 
-            _uow.Itens.Remove(item);
+            _uow.Items.Remove(item);
 
             _uow.Complete();
 

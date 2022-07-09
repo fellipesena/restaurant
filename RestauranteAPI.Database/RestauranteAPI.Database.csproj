@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Scripts\02_create_bill.sql" />
+    <EmbeddedResource Include="Scripts\03_create_waiter.sql" />
+    <EmbeddedResource Include="Scripts\04_create_item.sql" />
+    <EmbeddedResource Include="Scripts\05_create_order.sql" />
+    <EmbeddedResource Include="Scripts\06_create_orderitems.sql" />
+    <EmbeddedResource Include="Scripts\01_create_table.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="dbup" Version="4.6.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
+  </ItemGroup>
+	
+  <ItemGroup>
+	<Using Include="DbUp" />
+	<Using Include="DbUp.Engine" />
+	<Using Include="Microsoft.Extensions.Configuration" />
+	<Using Include="System.Reflection" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <None Update="appsettings.example.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

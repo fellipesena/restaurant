@@ -3,8 +3,8 @@ using RestauranteAPI.Models;
 
 namespace RestauranteAPI.Context.Persistence.Repositories
 {
-    public class ItemRepository : Repository<Item>, IItemRepository
+    public class TableRepository : Repository<Table>, ITableRepository
     {
-        public ItemRepository(RestaurantContext context) : base(context) { }
+        public TableRepository(RestaurantContext context) : base(context) { }
     }
 }

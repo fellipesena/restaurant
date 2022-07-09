@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace RestauranteAPI.Models
 {
@@ -12,12 +8,10 @@ namespace RestauranteAPI.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [JsonIgnore]
         public int Id { get; set; }
-        public string Nome { get; set; }
-        public string Descricao { get; set; }
-        public string Tipo { get; set; }
-        public decimal Valor { get; set; }
-
-        [Column("qtd_estoque")]
-        public int QtdEstoque { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Type { get; set; }
+        public decimal Value { get; set; }
+        public int StockQuantity { get; set; }
     }
 }
