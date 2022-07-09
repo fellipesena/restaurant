@@ -18,5 +18,5 @@ Special Behaviors:
 ## Restaurant.Database
 Created using SQLServer and DbUp to version control (migrations).
 
-Database diagram (in portuguese for while):
-![image](https://user-images.githubusercontent.com/42729316/128185865-2a4ef67a-8e64-4649-8ff6-91936ed654c4.png)
+Database diagram:
+![image](![image](https://user-images.githubusercontent.com/42729316/178124341-147c5cca-045f-4290-8ce4-35da8d2a2edb.png))
