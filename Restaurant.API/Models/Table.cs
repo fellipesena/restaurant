@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace Restaurant.API.Models
 {
@@ -7,9 +6,8 @@ namespace Restaurant.API.Models
     {
         public int Id { get; set; }
         public int Number { get; set; }
-        public bool Available { get; set; }
+        public bool Available { get; set; } = true;
 
-        [JsonIgnore]
         public IEnumerable<Bill> Orders { get; set; }
     }
 }

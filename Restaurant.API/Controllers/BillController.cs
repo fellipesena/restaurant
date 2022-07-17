@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Restaurant.API.Context.Core;
+using Restaurant.API.Interfaces.Services;
 using Restaurant.API.Models;
-using System.Linq;
 
 namespace Restaurant.API.Controllers
 {
@@ -9,9 +8,14 @@ namespace Restaurant.API.Controllers
     [ApiController]
     public class BillController : Controller
     {
-        private readonly IUnitOfWork _uow;
+        private readonly IBillService _billService;
+        private readonly ITableService _tableService;
 
-        public BillController(IUnitOfWork uow) => _uow = uow;
+        public BillController(IBillService billService, ITableService tableService)
+        {
+            _billService = billService;
+            _tableService = tableService;
+        } 
 
         /// <summary>
         /// Get bill by number of table
@@ -22,7 +26,8 @@ namespace Restaurant.API.Controllers
         [HttpGet("{tableNumber}")]
         public ActionResult<Bill> GetBill(int tableNumber)
         {
-            Bill bill = _uow.Bills.GetBillByTableNumber(tableNumber);
+            Bill bill = new() { TableId = tableNumber };
+            bill = _billService.GetByTableNumber(bill);
 
             return bill == null ? BadRequest("Table has no one bill openned") : bill;
         }
@@ -34,9 +39,10 @@ namespace Restaurant.API.Controllers
         /// <response code="200">Bill created successfully</response>
         /// <response code="400">Failed on create new bill</response>
         [HttpPost]
-        public ActionResult<Bill> PostConta(int tableNumber)
+        public ActionResult<Bill> OpenBill(int tableNumber)
         {
-            Table table = _uow.Tables.Find(_table => _table.Number == tableNumber).FirstOrDefault();
+            Table table = new() { Number = tableNumber };
+            table = _tableService.GetByNumber(table);
 
             if (table == null)
             {
@@ -47,18 +53,8 @@ namespace Restaurant.API.Controllers
                 return BadRequest($"Table {tableNumber} is not available");
             }
 
-            Bill bill = new()
-            {
-                Status = Enums.BillStatus.Openned,
-                TableId = table.Id,
-                Value = 0
-            };
-
-            _uow.Bills.Add(bill);
-
-            table.Available = false;
-
-            _uow.Complete();
+            Bill bill = new() { TableId = tableNumber, Table = table };
+            bill = _billService.StartNew(bill);
 
             return bill;
         }
@@ -69,24 +65,14 @@ namespace Restaurant.API.Controllers
         /// <param name="tableNumber"></param>
         /// <response code="200">Bill finished successfully</response>
         /// <response code="400">Has no bill to table number</response>
-        [HttpPut("{tableNumber}")]
-        public ActionResult<Bill> PutConta(int tableNumber)
+        [HttpPatch("{tableNumber}")]
+        public ActionResult<Bill> CloseBill(int tableNumber)
         {
-            Bill bill = _uow.Bills.GetBillByTableNumber(tableNumber);
+            Bill bill = new() { TableId = tableNumber };
 
-            if (bill == null)
-            {
-                return NotFound($"No bill to table {tableNumber} was found");
-            }
+            bill = _billService.Close(bill);
 
-            Table table = _uow.Tables.Get(bill.TableId);
-
-            table.Available = true;
-            bill.Status = Enums.BillStatus.Closed;
-
-            _uow.Complete();
-
-            return bill;
+            return bill == null ? NotFound($"No bill to table {tableNumber} was found") : bill;
         }
     }
 }

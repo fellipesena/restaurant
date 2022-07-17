@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Restaurant.API.Context.Core;
+using Restaurant.API.Interfaces.Services;
 using Restaurant.API.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,16 +12,16 @@ namespace Restaurant.API.Controllers
     [ApiController]
     public class WaiterController : ControllerBase
     {
-        private readonly IUnitOfWork _uow;
+        private readonly IWaiterService _waiterService;
 
-        public WaiterController(IUnitOfWork uow) => _uow = uow;
+        public WaiterController(IWaiterService waiterService) => _waiterService = waiterService;
 
         /// <summary>
         /// Get all waiters
         /// </summary>
         /// <response code="200">List with all waiters</response>
         [HttpGet]
-        public ActionResult<IEnumerable<Waiter>> GetWaiters() => _uow.Waiters.GetAll().ToList();
+        public ActionResult<IEnumerable<Waiter>> GetWaiters() =>Ok(_waiterService.GetAll());
 
         /// <summary>
         /// Create new waiter
@@ -29,14 +31,9 @@ namespace Restaurant.API.Controllers
         [HttpPost]
         public ActionResult<Waiter> PostWaiter(string name)
         {
-            Waiter waiter = new()
-            {
-                Name = name
-            };
+            Waiter waiter = new() { Name = name };
 
-            _uow.Waiters.Add(waiter);
-
-            _uow.Complete();
+            waiter = _waiterService.Insert(waiter);
 
             return waiter;
         }
@@ -50,16 +47,16 @@ namespace Restaurant.API.Controllers
         [HttpDelete]
         public ActionResult DeleteWaiter(int id)
         {
-            Waiter waiter = _uow.Waiters.Get(id);
+            Waiter waiter = new() { Id = id };
 
-            if (waiter == null)
+            try
             {
-                return BadRequest($"Has no waiter with id {id}");
+                _waiterService.Delete(waiter);
             }
-
-            _uow.Waiters.Remove(waiter);
-
-            _uow.Complete();
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
             return Ok();
         }

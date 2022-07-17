@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Restaurant.API.Context.Core;
+using Restaurant.API.Interfaces.Services;
 using Restaurant.API.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Restaurant.API.Controllers
 {
@@ -10,16 +10,16 @@ namespace Restaurant.API.Controllers
     [ApiController]
     public class TableController : ControllerBase
     {
-        private readonly IUnitOfWork _uow;
+        private readonly ITableService _tableService;
 
-        public TableController(IUnitOfWork uow) => _uow = uow;
+        public TableController(ITableService tableService) => _tableService = tableService;
 
         /// <summary>
         /// Get all tables
         /// </summary>
         /// <response code="200">List with all tables</response>
         [HttpGet]
-        public ActionResult<IEnumerable<Table>> GetTables() => _uow.Tables.GetAll().ToList();
+        public ActionResult<IEnumerable<Table>> GetTables() => Ok(_tableService.GetAll());
 
         /// <summary>
         /// Get table by number
@@ -30,7 +30,8 @@ namespace Restaurant.API.Controllers
         [HttpGet("{number}")]
         public ActionResult<Table> GetTable(int number)
         {
-            Table table = _uow.Tables.Find(_table => _table.Number == number).FirstOrDefault();
+            Table table = new() { Number = number };
+            table = _tableService.GetByNumber(table);
 
             return table != null ? table : BadRequest($"Table with number {number} was found");
         }
@@ -40,78 +41,50 @@ namespace Restaurant.API.Controllers
         /// </summary>
         /// <response code="200">List with all available tables</response>
         [HttpGet("Availables")]
-        public ActionResult<IEnumerable<Table>> GetAvailableTables() => _uow.Tables.Find(_table => _table.Available).ToList();
+        public ActionResult<IEnumerable<Table>> GetAvailableTables() => Ok(_tableService.GetAvailables());
 
         /// <summary>
-        /// Create new table
+        /// Create new table, if dont send number so will be next number
         /// </summary>
         /// <param name="number"></param>
         /// <response code="200">Table created successfully</response>
         /// <response code="400">Invalid table number</response>
         [HttpPost]
-        public ActionResult<Table> PostTableWithNumber(int number)
+        public ActionResult<Table> PostTable(int? number)
         {
-            Table tableAlreadyExists = _uow.Tables.Find(_mesa => _mesa.Number == number).FirstOrDefault();
+            Table table = new() { Number = number ?? 0 };
+            Table tableExists = _tableService.GetByNumber(table);
 
-            if (tableAlreadyExists != null)
+            if (tableExists != null)
             {
                 return BadRequest($"Already exists a table with number {number}");
             }
 
-            Table table = new()
-            {
-                Number = number,
-                Available = true
-            };
-
-            _uow.Tables.Add(table);
-
-            _uow.Complete();
+            table = _tableService.Insert(table);
 
             return table;
         }
 
         /// <summary>
-        /// Create new table with next sequence number
+        /// Delete table by id or number
         /// </summary>
-        /// <response code="200">Table created successfully</response>
-        [HttpPost]
-        public ActionResult<Table> PostTable()
-        {
-            int nextTableNumber = _uow.Tables.GetAll().OrderBy(_table => _table.Number).Last().Number;
-
-            Table table = new()
-            {
-                Number = nextTableNumber,
-                Available = true
-            };
-
-            _uow.Tables.Add(table);
-
-            _uow.Complete();
-
-            return table;
-        }
-
-        /// <summary>
-        /// Delete table by number
-        /// </summary>
+        /// <param name="id"></param>
         /// <param name="number"></param>
         /// <response code="200">Table deleted successfully</response>
         /// <response code="400">Invalid table number</response>
         [HttpDelete]
-        public ActionResult DeleteMesa(int number)
+        public ActionResult DeleteTableByNumber(int? id, int? number)
         {
-            Table table = _uow.Tables.Find(_table => _table.Number == number).FirstOrDefault();
+            Table table = new() { Id = id ?? 0, Number = number ?? 0 };
 
-            if (table == null)
+            try
             {
-                return BadRequest($"Has no table with numer {number}");
+                _tableService.Delete(table);
             }
-
-            _uow.Tables.Remove(table);
-
-            _uow.Complete();
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
             return Ok();
         }

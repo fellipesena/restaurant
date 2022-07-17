@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Restaurant.API.Context.Core;
+using Restaurant.API.Interfaces.Services;
 using Restaurant.API.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Restaurant.API.Controllers
 {
@@ -10,16 +10,16 @@ namespace Restaurant.API.Controllers
     [ApiController]
     public class ItemController : ControllerBase
     {
-        private readonly IUnitOfWork _uow;
+        private readonly IItemService _itemService;
 
-        public ItemController(IUnitOfWork uow) => _uow = uow;
+        public ItemController(IItemService itemService) => _itemService = itemService;
 
         /// <summary>
         /// Get all items
         /// </summary>
         /// <response code="200">List with all items</response>
         [HttpGet]
-        public ActionResult<IEnumerable<Item>> GetItens() => _uow.Items.GetAll().ToList();
+        public ActionResult<IEnumerable<Item>> GetItens() => Ok(_itemService.GetAll());
 
         /// <summary>
         /// Get item by id
@@ -29,7 +29,9 @@ namespace Restaurant.API.Controllers
         [HttpGet("{id}")]
         public ActionResult<Item> GetItem(int id)
         {
-            Item item = _uow.Items.Get(id);
+            Item item = new() { Id = id };
+
+            item = _itemService.Get(item);
 
             return item == null ? BadRequest($"Has no item with id {id}") : item;
         }
@@ -39,11 +41,9 @@ namespace Restaurant.API.Controllers
         /// </summary>
         /// <response code="200">Item created successfully</response>
         [HttpPost]
-        public ActionResult<Item> PostItem(Item item)
+        public ActionResult<Item> InsertItem(Item item)
         {
-            _uow.Items.Add(item);
-
-            _uow.Complete();
+            item = _itemService.Insert(item);
 
             return item;
         }
@@ -54,20 +54,11 @@ namespace Restaurant.API.Controllers
         /// <response code="200">Item updated successfully</response>
         /// <response code="400">Invalid item id</response>
         [HttpPut("{id}")]
-        public ActionResult<Item> PutItem(int id, Item item)
+        public ActionResult<Item> PatchItem(int id, Item item)
         {
-            Item actualItem = _uow.Items.Get(id);
-            if (actualItem == null)
-            {
-                return BadRequest($"Has no item with id {id}");
-            }
-            actualItem.Name = item.Name;
-            actualItem.Description = item.Description;
-            actualItem.Type = item.Type;
-            actualItem.Value = item.Value;
-            actualItem.StockQuantity = item.StockQuantity;
+            item.Id = id;
 
-            _uow.Complete();
+            item = _itemService.Update(item);
 
             return item;
         }
@@ -80,16 +71,16 @@ namespace Restaurant.API.Controllers
         [HttpDelete]
         public ActionResult DeleteItem(int id)
         {
-            Item item = _uow.Items.Get(id);
+            Item item = new() { Id = id };
 
-            if (item == null)
+            try
             {
-                return BadRequest($"Has no item with id {id}");
+                _itemService.Delete(item);
             }
-
-            _uow.Items.Remove(item);
-
-            _uow.Complete();
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
             return Ok();
         }

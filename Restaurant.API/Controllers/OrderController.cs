@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Restaurant.API.Context.Core;
+using Restaurant.API.Interfaces.Services;
 using Restaurant.API.Models;
 using System;
 using System.Collections.Generic;
@@ -10,9 +10,16 @@ namespace Restaurant.API.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IUnitOfWork _uow;
+        private readonly IOrderService _orderService;
+        private readonly IWaiterService _waiterService;
+        private readonly IBillService _billService;
 
-        public OrderController(IUnitOfWork uow) => _uow = uow;
+        public OrderController(IOrderService orderService, IWaiterService waiterService, IBillService billService)
+        {
+            _orderService = orderService;
+            _waiterService = waiterService;
+            _billService = billService;
+        }
 
         /// <summary>
         /// Create a new order
@@ -25,59 +32,30 @@ namespace Restaurant.API.Controllers
         [HttpPost]
         public ActionResult<Order> PostOrder(IEnumerable<OrderItems> orderItems, int waiterId, int tableNumber)
         {
-            Waiter waiterIsValid = _uow.Waiters.Get(waiterId);
-            if (waiterIsValid == null)
+            Waiter waiter = new() { Id = waiterId };
+            waiter = _waiterService.Get(waiter);
+            if (waiter == null)
             {
                 return BadRequest($"No one waiter with id {waiterId} was found");
             }
 
-            Bill bill = _uow.Bills.GetBillByTableNumber(tableNumber);
+            Bill bill = new() { TableId = tableNumber };
+            bill = _billService.GetByTableNumber(bill);
             if (bill == null)
             {
                 return BadRequest($"No one openned bill to table {tableNumber} was found");
             }
 
-            decimal orderValue = 0;
+            Order order = new() { Waiter = waiter, Bill = bill, OrderItems = orderItems };
 
-            foreach (OrderItems itens in orderItems)
+            try
             {
-                Item item = _uow.Items.Get(itens.ItemId);
-
-                if (item.StockQuantity < itens.Quantity)
-                {
-                    return BadRequest($"Has no {item.Name} in stock. Available stock quantity is {item.StockQuantity}");
-                }
-
-                itens.UnitValue = item.Value;
-                itens.TotalValue = item.Value * itens.Quantity;
-                item.StockQuantity -= itens.Quantity;
-
-                orderValue += itens.TotalValue;
+                order = _orderService.Insert(order);
             }
-
-            Order order = new()
+            catch(Exception ex)
             {
-                Value = orderValue,
-                WaiterId = waiterId,
-                BillId = bill.Id,
-                TableId = bill.TableId,
-                DateTime = DateTime.Now
-            };
-
-            bill.Value += orderValue;
-
-            _uow.Orders.Add(order);
-
-            _uow.Complete();
-
-            foreach (OrderItems itens in orderItems)
-            {
-                itens.OrderId = order.Id;
+                return BadRequest(ex.Message);
             }
-
-            _uow.OrderItems.AddRange(orderItems);
-
-            _uow.Complete();
 
             return order;
         }
