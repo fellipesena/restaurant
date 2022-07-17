@@ -8,11 +8,11 @@ namespace Restaurant.API.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class TableController : ControllerBase
+    public class TablesController : ControllerBase
     {
         private readonly ITableService _tableService;
 
-        public TableController(ITableService tableService) => _tableService = tableService;
+        public TablesController(ITableService tableService) => _tableService = tableService;
 
         /// <summary>
         /// Get all tables
@@ -33,7 +33,7 @@ namespace Restaurant.API.Controllers
             Table table = new() { Number = number };
             table = _tableService.GetByNumber(table);
 
-            return table != null ? table : BadRequest($"Table with number {number} was found");
+            return table != null ? Ok(table) : BadRequest($"Table with number {number} was found");
         }
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace Restaurant.API.Controllers
 
             table = _tableService.Insert(table);
 
-            return table;
+            return Ok(table);
         }
 
         /// <summary>

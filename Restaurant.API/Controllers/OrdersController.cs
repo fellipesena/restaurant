@@ -8,13 +8,13 @@ namespace Restaurant.API.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrdersController : ControllerBase
     {
         private readonly IOrderService _orderService;
         private readonly IWaiterService _waiterService;
         private readonly IBillService _billService;
 
-        public OrderController(IOrderService orderService, IWaiterService waiterService, IBillService billService)
+        public OrdersController(IOrderService orderService, IWaiterService waiterService, IBillService billService)
         {
             _orderService = orderService;
             _waiterService = waiterService;
@@ -57,7 +57,7 @@ namespace Restaurant.API.Controllers
                 return BadRequest(ex.Message);
             }
 
-            return order;
+            return Ok(order);
         }
     }
 }

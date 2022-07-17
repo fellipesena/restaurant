@@ -10,11 +10,11 @@ namespace Restaurant.API.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class WaiterController : ControllerBase
+    public class WaitersController : ControllerBase
     {
         private readonly IWaiterService _waiterService;
 
-        public WaiterController(IWaiterService waiterService) => _waiterService = waiterService;
+        public WaitersController(IWaiterService waiterService) => _waiterService = waiterService;
 
         /// <summary>
         /// Get all waiters
@@ -35,7 +35,7 @@ namespace Restaurant.API.Controllers
 
             waiter = _waiterService.Insert(waiter);
 
-            return waiter;
+            return Ok(waiter);
         }
 
         /// <summary>

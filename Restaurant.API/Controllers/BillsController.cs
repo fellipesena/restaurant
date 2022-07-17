@@ -6,12 +6,12 @@ namespace Restaurant.API.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class BillController : Controller
+    public class BillsController : Controller
     {
         private readonly IBillService _billService;
         private readonly ITableService _tableService;
 
-        public BillController(IBillService billService, ITableService tableService)
+        public BillsController(IBillService billService, ITableService tableService)
         {
             _billService = billService;
             _tableService = tableService;
@@ -29,7 +29,7 @@ namespace Restaurant.API.Controllers
             Bill bill = new() { TableId = tableNumber };
             bill = _billService.GetByTableNumber(bill);
 
-            return bill == null ? BadRequest("Table has no one bill openned") : bill;
+            return bill != null Ok(bill) : BadRequest("Table has no one bill openned");
         }
 
         /// <summary>
@@ -53,10 +53,10 @@ namespace Restaurant.API.Controllers
                 return BadRequest($"Table {tableNumber} is not available");
             }
 
-            Bill bill = new() { TableId = tableNumber, Table = table };
+            Bill bill = new() { Table = table };
             bill = _billService.StartNew(bill);
 
-            return bill;
+            return Ok(bill);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Restaurant.API.Controllers
 
             bill = _billService.Close(bill);
 
-            return bill == null ? NotFound($"No bill to table {tableNumber} was found") : bill;
+            return bill != null ? Ok(bill) : BadRequest($"No bill to table {tableNumber} was found");
         }
     }
 }

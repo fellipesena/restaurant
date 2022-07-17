@@ -8,11 +8,11 @@ namespace Restaurant.API.Controllers
 {
     [Route("/api/[controller]")]
     [ApiController]
-    public class ItemController : ControllerBase
+    public class ItemsController : ControllerBase
     {
         private readonly IItemService _itemService;
 
-        public ItemController(IItemService itemService) => _itemService = itemService;
+        public ItemsController(IItemService itemService) => _itemService = itemService;
 
         /// <summary>
         /// Get all items
