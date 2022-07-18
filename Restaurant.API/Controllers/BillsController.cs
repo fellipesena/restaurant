@@ -18,7 +18,7 @@ namespace Restaurant.API.Controllers
         } 
 
         /// <summary>
-        /// Get bill by number of table
+        /// Get bill by table number
         /// </summary>
         /// <param name="tableNumber"></param>
         /// <response code="200">Bill by number of table</response>
@@ -29,7 +29,7 @@ namespace Restaurant.API.Controllers
             Bill bill = new() { TableId = tableNumber };
             bill = _billService.GetByTableNumber(bill);
 
-            return bill != null Ok(bill) : BadRequest("Table has no one bill openned");
+            return bill != null ? Ok(bill) : BadRequest("Table has no one bill openned");
         }
 
         /// <summary>
