@@ -7,12 +7,12 @@ namespace Restaurant.API.Context
     {
         public RestaurantContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<Bill> Bill { get; set; }
-        public DbSet<Waiter> Waiter { get; set; }
-        public DbSet<Item> Item { get; set; }
-        public DbSet<OrderItems> OrderItems { get; set; }
-        public DbSet<Table> Table { get; set; }
-        public DbSet<Order> Order { get; set; }
+        public virtual DbSet<Bill> Bill { get; set; }
+        public virtual DbSet<Waiter> Waiter { get; set; }
+        public virtual DbSet<Item> Item { get; set; }
+        public virtual DbSet<OrderItems> OrderItems { get; set; }
+        public virtual DbSet<Table> Table { get; set; }
+        public virtual DbSet<Order> Order { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
