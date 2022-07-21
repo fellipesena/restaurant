@@ -19,7 +19,7 @@ namespace Restaurant.API.Controllers
         /// </summary>
         /// <response code="200">List with all items</response>
         [HttpGet]
-        public ActionResult<IEnumerable<Item>> GetItens() => Ok(_itemService.GetAll());
+        public ActionResult<IEnumerable<Item>> GetItems() => Ok(_itemService.GetAll());
 
         /// <summary>
         /// Get item by id
@@ -33,7 +33,7 @@ namespace Restaurant.API.Controllers
 
             item = _itemService.Get(item);
 
-            return item == null ? BadRequest($"Has no item with id {id}") : item;
+            return item == null ? BadRequest($"Has no item with id {id}") : Ok(item);
         }
 
         /// <summary>
@@ -41,11 +41,11 @@ namespace Restaurant.API.Controllers
         /// </summary>
         /// <response code="200">Item created successfully</response>
         [HttpPost]
-        public ActionResult<Item> InsertItem(Item item)
+        public ActionResult<Item> PostItem(Item item)
         {
             item = _itemService.Insert(item);
 
-            return item;
+            return Ok(item);
         }
 
         /// <summary>
@@ -53,14 +53,21 @@ namespace Restaurant.API.Controllers
         /// </summary>
         /// <response code="200">Item updated successfully</response>
         /// <response code="400">Invalid item id</response>
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public ActionResult<Item> PatchItem(int id, Item item)
         {
             item.Id = id;
 
-            item = _itemService.Update(item);
+            try
+            {
+                item = _itemService.Update(item);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-            return item;
+            return Ok(item);
         }
 
         /// <summary>

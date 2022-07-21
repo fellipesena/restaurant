@@ -28,6 +28,10 @@ namespace Restaurant.API.Services
         {
             Item newItem = _uow.Items.Get(item.Id);
 
+            if (newItem == null)
+            {
+                throw new Exception("Item not found");
+            }
             if (!string.IsNullOrEmpty(item.Name) && item.Name != newItem.Name)
             {
                 newItem.Name = item.Name;
