@@ -34,7 +34,7 @@ namespace Restaurant.API.Services
         {
             table = _uow.Tables.Find(_table => _table.Id == table.Id || _table.Number == table.Number).FirstOrDefault();
 
-            if(table == null)
+            if (table == null)
             {
                 throw new Exception("Table not found");
             }

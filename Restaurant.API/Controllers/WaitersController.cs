@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Restaurant.API.Context.Core;
 using Restaurant.API.Interfaces.Services;
 using Restaurant.API.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Restaurant.API.Controllers
 {
@@ -21,7 +19,7 @@ namespace Restaurant.API.Controllers
         /// </summary>
         /// <response code="200">List with all waiters</response>
         [HttpGet]
-        public ActionResult<IEnumerable<Waiter>> GetWaiters() =>Ok(_waiterService.GetAll());
+        public ActionResult<IEnumerable<Waiter>> GetWaiters() => Ok(_waiterService.GetAll());
 
         /// <summary>
         /// Create new waiter
@@ -53,7 +51,7 @@ namespace Restaurant.API.Controllers
             {
                 _waiterService.Delete(waiter);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

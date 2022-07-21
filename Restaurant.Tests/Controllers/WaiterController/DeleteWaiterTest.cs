@@ -15,7 +15,7 @@ namespace Restaurant.Tests.Controllers.WaiterController
             _ = _waiterService.Setup(_ => _.Delete(It.IsAny<Waiter>()));
 
             WaitersController waitersController = new(_waiterService.Object);
-            
+
             int id = _faker.Random.Int();
             ActionResult result = waitersController.DeleteWaiter(id);
 

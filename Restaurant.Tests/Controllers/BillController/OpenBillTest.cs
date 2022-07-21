@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Newtonsoft.Json;
 using Restaurant.API.Controllers;
 using Restaurant.API.Models;
 using Xunit;
@@ -15,7 +14,7 @@ namespace Restaurant.Tests.Controllers.BillController
             _ = _tableService.Setup(_ => _.GetByNumber(It.IsAny<Table>())).Returns((Table)null);
 
             BillsController billsController = new(_billService.Object, _tableService.Object);
-            
+
             int tableNumber = _faker.Random.Int();
             ActionResult result = billsController.OpenBill(tableNumber).Result;
 

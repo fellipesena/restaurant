@@ -15,7 +15,7 @@ namespace Restaurant.API.Controllers
         {
             _billService = billService;
             _tableService = tableService;
-        } 
+        }
 
         /// <summary>
         /// Get bill by table number

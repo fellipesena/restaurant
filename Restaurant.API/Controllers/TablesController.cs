@@ -81,7 +81,7 @@ namespace Restaurant.API.Controllers
             {
                 _tableService.Delete(table);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

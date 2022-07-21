@@ -2,7 +2,6 @@
 using Moq;
 using Restaurant.API.Controllers;
 using Restaurant.API.Models;
-using System;
 using Xunit;
 
 namespace Restaurant.Tests.Controllers.ItemController

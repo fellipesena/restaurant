@@ -62,7 +62,7 @@ namespace Restaurant.API.Controllers
             {
                 item = _itemService.Update(item);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -84,7 +84,7 @@ namespace Restaurant.API.Controllers
             {
                 _itemService.Delete(item);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

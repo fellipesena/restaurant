@@ -3,11 +3,6 @@ using Moq;
 using Newtonsoft.Json;
 using Restaurant.API.Controllers;
 using Restaurant.API.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Restaurant.Tests.Controllers.BillController

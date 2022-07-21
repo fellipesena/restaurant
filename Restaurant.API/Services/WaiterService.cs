@@ -28,7 +28,7 @@ namespace Restaurant.API.Services
         {
             waiter = Get(waiter);
 
-            if(waiter == null)
+            if (waiter == null)
             {
                 throw new Exception("Waiter not found");
             }

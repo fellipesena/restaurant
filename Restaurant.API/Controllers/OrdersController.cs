@@ -52,7 +52,7 @@ namespace Restaurant.API.Controllers
             {
                 order = _orderService.Insert(order);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

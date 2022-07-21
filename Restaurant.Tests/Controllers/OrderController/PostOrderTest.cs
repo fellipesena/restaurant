@@ -20,7 +20,7 @@ namespace Restaurant.Tests.Controllers.OrderController
             ActionResult result = ordersController.PostOrder(_orderItems, waiterId, _faker.Random.Int()).Result;
 
             BadRequestObjectResult objectResult = Assert.IsType<BadRequestObjectResult>(result);
-            
+
             Assert.Equal($"No one waiter with id {waiterId} was found", objectResult.Value);
         }
 
@@ -45,7 +45,7 @@ namespace Restaurant.Tests.Controllers.OrderController
         {
             _ = _waiterService.Setup(_ => _.Get(It.IsAny<Waiter>())).Returns(new Waiter());
             _ = _billService.Setup(_ => _.GetByTableNumber(It.IsAny<Bill>())).Returns(new Bill());
-            
+
             string exceptionMessage = _faker.Random.Word();
             _ = _orderService.Setup(_ => _.Insert(It.IsAny<Order>())).Throws(new Exception(exceptionMessage));
 
