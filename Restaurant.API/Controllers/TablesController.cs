@@ -33,7 +33,7 @@ namespace Restaurant.API.Controllers
             Table table = new() { Number = number };
             table = _tableService.GetByNumber(table);
 
-            return table != null ? Ok(table) : BadRequest($"Table with number {number} was found");
+            return table != null ? Ok(table) : BadRequest($"Has no table with number {number}");
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Restaurant.API.Controllers
         /// <response code="200">Table deleted successfully</response>
         /// <response code="400">Invalid table number</response>
         [HttpDelete]
-        public ActionResult DeleteTableByNumber(int? id, int? number)
+        public ActionResult DeleteTable(int? id, int? number)
         {
             Table table = new() { Id = id ?? 0, Number = number ?? 0 };
 
