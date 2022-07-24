@@ -11,7 +11,7 @@ namespace Restaurant.Tests.Repositories.BillRepositoryTest
         [Fact]
         public void GetBillById()
         {
-            Bill bill =  _billRepository.Get(1);
+            Bill bill = _billRepository.Get(1);
 
             Assert.NotNull(bill);
             Assert.Equal(1, bill.Id);
@@ -86,13 +86,16 @@ namespace Restaurant.Tests.Repositories.BillRepositoryTest
         public void GetBillByTableNumber()
         {
             int tableNumber = _faker.Random.Int(0, 5);
-            Bill newBill = new() { Status = BillStatus.Openned, Value = _faker.Random.Decimal(), Table = new Table() { Number = tableNumber } };
+            Table newTable = new() { Number = tableNumber };
+            _tableRepository.Add(newTable);
+
+            Bill newBill = new() { Status = BillStatus.Openned, Value = _faker.Random.Decimal(), TableId = newTable.Id, Table = newTable };
             _billRepository.Add(newBill);
 
             Bill result = _billRepository.GetBillByTableNumber(tableNumber);
 
             Assert.Equal(newBill.Id, result.Id);
-            Assert.Equal(tableNumber, result.Id);
+            Assert.Equal(tableNumber, result.Table.Number);
         }
     }
 }

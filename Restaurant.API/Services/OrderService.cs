@@ -40,16 +40,12 @@ namespace Restaurant.API.Services
 
             _uow.Orders.Add(order);
 
-            _uow.Complete();
-
             foreach (OrderItems itens in order.OrderItems)
             {
                 itens.OrderId = order.Id;
             }
 
             _uow.OrderItems.AddRange(order.OrderItems);
-
-            _uow.Complete();
 
             return order;
         }

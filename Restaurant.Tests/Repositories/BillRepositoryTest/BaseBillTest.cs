@@ -8,12 +8,14 @@ namespace Restaurant.Tests.Repositories.BillRepositoryTest
     public class BaseBillTest : BaseRestaurantContext
     {
         protected readonly BillRepository _billRepository;
+        protected readonly TableRepository _tableRepository;
         protected readonly Faker _faker;
         
         public BaseBillTest()
         {
             _faker = new Faker();
             _billRepository = new BillRepository(_context);
+            _tableRepository = new TableRepository(_context);
 
             List<Bill> bills = new()
             {
@@ -34,7 +36,7 @@ namespace Restaurant.Tests.Repositories.BillRepositoryTest
                 },
             };
 
-            _context.AddRange(bills);
+            _context.Bill.AddRange(bills);
             _ = _context.SaveChanges();
         }
     }

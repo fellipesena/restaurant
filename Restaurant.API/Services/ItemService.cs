@@ -19,8 +19,6 @@ namespace Restaurant.API.Services
         {
             _uow.Items.Add(item);
 
-            _uow.Complete();
-
             return item;
         }
 
@@ -53,8 +51,6 @@ namespace Restaurant.API.Services
                 newItem.StockQuantity = item.StockQuantity;
             }
 
-            _uow.Complete();
-
             return newItem;
         }
 
@@ -68,7 +64,6 @@ namespace Restaurant.API.Services
             }
 
             _uow.Items.Remove(item);
-            _uow.Complete();
         }
     }
 }

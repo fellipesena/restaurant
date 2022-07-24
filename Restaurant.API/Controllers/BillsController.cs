@@ -22,20 +22,19 @@ namespace Restaurant.API.Controllers
         /// </summary>
         /// <param name="tableNumber"></param>
         /// <response code="200">Bill by number of table</response>
-        /// <response code="400">Table has no bill openned</response>
+        /// <response code="400">Table doesnt exists or table has no bill</response>
         [HttpGet("{tableNumber}")]
         public ActionResult<Bill> GetBill(int tableNumber)
         {
             Table table = new() { Number = tableNumber };
             table = _tableService.GetByNumber(table);
-
             if (table == null)
                 return BadRequest($"Has no table with number {tableNumber}");
 
             Bill bill = new() { Table = table };
             bill = _billService.GetByTableNumber(bill);
 
-            return bill != null ? Ok(bill) : BadRequest("Table has no one bill openned");
+            return bill != null ? Ok(bill) : BadRequest("Table has no one bill");
         }
 
         /// <summary>

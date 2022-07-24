@@ -9,8 +9,24 @@ namespace Restaurant.Tests.Controllers.BillController
     public class CloseBillTest : BillBaseTest
     {
         [Fact]
+        public void ShouldReturnBadRequest_WhenHaveTable()
+        {
+            _ = _tableService.Setup(_ => _.GetByNumber(It.IsAny<Table>())).Returns((Table)null);
+
+            BillsController billsController = new(_billService.Object, _tableService.Object);
+
+            int tableNumber = _faker.Random.Int();
+            ActionResult result = billsController.CloseBill(tableNumber).Result;
+
+            BadRequestObjectResult objectResult = Assert.IsType<BadRequestObjectResult>(result);
+
+            Assert.Equal($"Has no table with number {tableNumber}", objectResult.Value);
+        }
+
+        [Fact]
         public void ShouldReturnBadRequest_WhenHaveNoBillToTable()
         {
+            _ = _tableService.Setup(_ => _.GetByNumber(It.IsAny<Table>())).Returns(new Table());
             _ = _billService.Setup(_ => _.Close(It.IsAny<Bill>())).Returns((Bill)null);
 
             BillsController billsController = new(_billService.Object, _tableService.Object);
@@ -26,6 +42,7 @@ namespace Restaurant.Tests.Controllers.BillController
         [Fact]
         public void ShouldReturnOkAndBill_WhenTableIsAvailable()
         {
+            _ = _tableService.Setup(_ => _.GetByNumber(It.IsAny<Table>())).Returns(new Table());
             _ = _billService.Setup(_ => _.Close(It.IsAny<Bill>())).Returns(new Bill());
 
             BillsController billsController = new(_billService.Object, _tableService.Object);

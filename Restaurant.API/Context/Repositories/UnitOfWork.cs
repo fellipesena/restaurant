@@ -36,8 +36,6 @@ namespace Restaurant.API.Context.Persistence
         public ITableRepository Tables { get; private set; }
         public IOrderRepository Orders { get; private set; }
 
-        public void Complete() => _context.SaveChanges();
-
         public void Attach<TEntity>(TEntity entity) where TEntity : class => _context.Set<TEntity>().Attach(entity);
 
         public void Dispose()

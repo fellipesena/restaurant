@@ -18,7 +18,6 @@ namespace Restaurant.API.Services
         public Waiter Insert(Waiter waiter)
         {
             _uow.Waiters.Add(waiter);
-            _uow.Complete();
 
             return waiter;
         }
@@ -33,7 +32,6 @@ namespace Restaurant.API.Services
             }
 
             _uow.Waiters.Remove(waiter);
-            _uow.Complete();
         }
     }
 }

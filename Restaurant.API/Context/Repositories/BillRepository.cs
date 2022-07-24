@@ -12,8 +12,8 @@ namespace Restaurant.API.Context.Persistence.Repositories
 
         public Bill GetBillByTableNumber(int number) =>
             RestaurantContext.Bill
-            .Where(_bill => _bill.Table.Number == number)
             .Include(_bill => _bill.Table)
+            .Where(_bill => _bill.Table.Number == number)
             .Include(_bill => _bill.Orders)
                 .ThenInclude(_orders => _orders.OrderItems)
                 .ThenInclude(_orderItems => _orderItems.Item)

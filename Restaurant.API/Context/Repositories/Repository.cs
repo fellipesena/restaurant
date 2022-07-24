@@ -19,10 +19,22 @@ namespace Restaurant.API.Context.Persistence.Repositories
 
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate) => Context.Set<TEntity>().Where(predicate);
 
-        public void Add(TEntity entity) => Context.Set<TEntity>().Add(entity);
+        public void Add(TEntity entity)
+        {
+            _ = Context.Set<TEntity>().Add(entity);
+            _ = Context.SaveChanges();
+        }
 
-        public void AddRange(IEnumerable<TEntity> entities) => Context.Set<TEntity>().AddRange(entities);
+        public void AddRange(IEnumerable<TEntity> entities)
+        {
+            Context.Set<TEntity>().AddRange(entities);
+            _ = Context.SaveChanges();
+        }
 
-        public void Remove(TEntity entity) => Context.Set<TEntity>().Remove(entity);
+        public void Remove(TEntity entity)
+        {
+            Context.Set<TEntity>().Remove(entity);
+            _ = Context.SaveChanges();
+        }
     }
 }

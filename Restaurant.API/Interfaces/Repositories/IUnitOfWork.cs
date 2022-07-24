@@ -11,7 +11,6 @@ namespace Restaurant.API.Context.Core
         IOrderItemsRepository OrderItems { get; }
         ITableRepository Tables { get; }
         IOrderRepository Orders { get; }
-        void Complete();
         void Attach<TEntity>(TEntity entity) where TEntity : class;
     }
 }

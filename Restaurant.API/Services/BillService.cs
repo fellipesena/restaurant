@@ -21,8 +21,6 @@ namespace Restaurant.API.Services
             _uow.Attach(bill.Table);
             bill.Table.Available = false;
 
-            _uow.Complete();
-
             return bill;
         }
 
@@ -35,8 +33,6 @@ namespace Restaurant.API.Services
 
             bill.Status = Enums.BillStatus.Closed;
             bill.Table.Available = true;
-
-            _uow.Complete();
 
             return bill;
         }
