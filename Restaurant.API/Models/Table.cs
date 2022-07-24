@@ -9,7 +9,5 @@ namespace Restaurant.API.Models
         public int Id { get; set; }
         public int Number { get; set; }
         public bool Available { get; set; } = true;
-
-        public virtual IEnumerable<Bill> Orders { get; set; }
     }
 }

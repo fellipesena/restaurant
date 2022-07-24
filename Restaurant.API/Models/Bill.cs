@@ -8,10 +8,8 @@ namespace Restaurant.API.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-
-        [ForeignKey("Table")]
         public int TableId { get; set; }
-        public Table Table { get; set; }
+        public virtual Table Table { get; set; }
         public virtual IEnumerable<Order> Orders { get; set; }
         public BillStatus Status { get; set; }
         public decimal Value { get; set; }

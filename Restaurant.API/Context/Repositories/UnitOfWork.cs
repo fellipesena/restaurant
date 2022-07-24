@@ -38,6 +38,8 @@ namespace Restaurant.API.Context.Persistence
 
         public void Complete() => _context.SaveChanges();
 
+        public void Attach<TEntity>(TEntity entity) where TEntity : class => _context.Set<TEntity>().Attach(entity);
+
         public void Dispose()
         {
             _context.Dispose();

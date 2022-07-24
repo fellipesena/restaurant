@@ -12,11 +12,12 @@ namespace Restaurant.API.Context.Persistence.Repositories
 
         public Bill GetBillByTableNumber(int number) =>
             RestaurantContext.Bill
-                .Include(_order => _order.Orders)
-                .ThenInclude(_orderItems => _orderItems.OrderItems)
-                .ThenInclude(_item => _item.Item)
-                .Where(_bill => _bill.Table.Number == number && _bill.Status == BillStatus.Openned)
-                .FirstOrDefault();
+            .Where(_bill => _bill.Table.Number == number)
+            .Include(_bill => _bill.Table)
+            .Include(_bill => _bill.Orders)
+                .ThenInclude(_orders => _orders.OrderItems)
+                .ThenInclude(_orderItems => _orderItems.Item)
+            .FirstOrDefault();
 
         public RestaurantContext RestaurantContext => Context as RestaurantContext;
     }

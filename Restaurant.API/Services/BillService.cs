@@ -18,6 +18,7 @@ namespace Restaurant.API.Services
 
             _uow.Bills.Add(bill);
 
+            _uow.Attach(bill.Table);
             bill.Table.Available = false;
 
             _uow.Complete();
