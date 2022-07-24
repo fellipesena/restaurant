@@ -26,7 +26,13 @@ namespace Restaurant.API.Controllers
         [HttpGet("{tableNumber}")]
         public ActionResult<Bill> GetBill(int tableNumber)
         {
-            Bill bill = new() { TableId = tableNumber };
+            Table table = new() { Number = tableNumber };
+            table = _tableService.GetByNumber(table);
+
+            if (table == null)
+                return BadRequest($"Has no table with number {tableNumber}");
+
+            Bill bill = new() { Table = table };
             bill = _billService.GetByTableNumber(bill);
 
             return bill != null ? Ok(bill) : BadRequest("Table has no one bill openned");
@@ -68,7 +74,13 @@ namespace Restaurant.API.Controllers
         [HttpPatch("{tableNumber}")]
         public ActionResult<Bill> CloseBill(int tableNumber)
         {
-            Bill bill = new() { TableId = tableNumber };
+            Table table = new() { Number = tableNumber };
+            table = _tableService.GetByNumber(table);
+
+            if (table == null)
+                return BadRequest($"Has no table with number {tableNumber}");
+
+            Bill bill = new() { Table = table };
 
             bill = _billService.Close(bill);
 

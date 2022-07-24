@@ -11,16 +11,16 @@ namespace Restaurant.API.Models
 
         [ForeignKey("Bill")]
         public int BillId { get; set; }
-        public Bill Bill { get; set; }
+        public virtual Bill Bill { get; set; }
 
         [ForeignKey("Table")]
         public int TableId { get; set; }
-        public Table Table { get; set; }
+        public virtual Table Table { get; set; }
 
         [ForeignKey("Waiter")]
         public int WaiterId { get; set; }
-        public Waiter Waiter { get; set; }
-        public IEnumerable<OrderItems> OrderItems { get; set; }
+        public virtual Waiter Waiter { get; set; }
+        public virtual IEnumerable<OrderItems> OrderItems { get; set; }
         public DateTime DateTime { get; set; }
         public decimal Value { get; set; }
     }

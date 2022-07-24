@@ -68,6 +68,7 @@ namespace Restaurant.API.Services
             }
 
             _uow.Items.Remove(item);
+            _uow.Complete();
         }
     }
 }

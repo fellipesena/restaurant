@@ -16,11 +16,13 @@ namespace Restaurant.API.Services
         {
             if (table.Number == 0)
             {
-                int lastTableNumber = _uow.Tables.GetAll().OrderBy(_table => _table.Number).Last().Number;
+                int lastTableNumber = _uow.Tables.GetAll().OrderBy(_table => _table.Number).LastOrDefault()?.Number ?? 0;
                 table.Number = lastTableNumber + 1;
             }
 
             _uow.Tables.Add(table);
+            _uow.Complete();
+
             return table;
         }
 
@@ -40,6 +42,7 @@ namespace Restaurant.API.Services
             }
 
             _uow.Tables.Remove(table);
+            _uow.Complete();
         }
     }
 }

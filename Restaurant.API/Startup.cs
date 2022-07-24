@@ -8,6 +8,8 @@ using Microsoft.OpenApi.Models;
 using Restaurant.API.Context;
 using Restaurant.API.Context.Core;
 using Restaurant.API.Context.Persistence;
+using Restaurant.API.Interfaces.Services;
+using Restaurant.API.Services;
 using System;
 using System.IO;
 using System.Reflection;
@@ -25,6 +27,11 @@ namespace Restaurant.API
         {
             _ = services.AddDbContext<RestaurantContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default")));
             _ = services.AddTransient<IUnitOfWork>(x => new UnitOfWork(Configuration));
+            _ = services.AddScoped<IBillService, BillService>();
+            _ = services.AddScoped<IItemService, ItemService>();
+            _ = services.AddScoped<IOrderService, OrderService>();
+            _ = services.AddScoped<ITableService, TableService>();
+            _ = services.AddScoped<IWaiterService, WaiterService>();
             _ = services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             _ = services.AddSwaggerGen(c =>
               {

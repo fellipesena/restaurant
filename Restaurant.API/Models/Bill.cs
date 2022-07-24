@@ -12,7 +12,7 @@ namespace Restaurant.API.Models
         [ForeignKey("Table")]
         public int TableId { get; set; }
         public Table Table { get; set; }
-        public IEnumerable<Order> Orders { get; set; }
+        public virtual IEnumerable<Order> Orders { get; set; }
         public BillStatus Status { get; set; }
         public decimal Value { get; set; }
     }
