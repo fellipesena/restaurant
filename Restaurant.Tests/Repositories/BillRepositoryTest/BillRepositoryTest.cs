@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Restaurant.Tests.Repositories.BillRepositoryTest
 {
-    public class GetBillByTableNumberTest : BaseBillTest
+    public class BillRepositoryTest : BaseBillTest
     {
         [Fact]
         public void GetBillById()
@@ -81,7 +81,6 @@ namespace Restaurant.Tests.Repositories.BillRepositoryTest
             Assert.Null(newBill);
         }
 
-        // TODO: make this method works
         [Fact]
         public void GetBillByTableNumber()
         {
