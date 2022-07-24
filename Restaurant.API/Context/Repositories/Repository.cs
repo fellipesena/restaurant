@@ -33,7 +33,7 @@ namespace Restaurant.API.Context.Persistence.Repositories
 
         public void Remove(TEntity entity)
         {
-            Context.Set<TEntity>().Remove(entity);
+            _ = Context.Set<TEntity>().Remove(entity);
             _ = Context.SaveChanges();
         }
     }
