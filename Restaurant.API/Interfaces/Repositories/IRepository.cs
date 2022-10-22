@@ -11,6 +11,7 @@ namespace Restaurant.API.Context.Core.Repositories
         IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
         void Add(TEntity entity);
         void AddRange(IEnumerable<TEntity> entities);
+        void Update(TEntity entitiy);
         void Remove(TEntity entity);
     }
 }

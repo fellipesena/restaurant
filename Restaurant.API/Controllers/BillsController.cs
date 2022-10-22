@@ -22,19 +22,19 @@ namespace Restaurant.API.Controllers
         /// </summary>
         /// <param name="tableNumber"></param>
         /// <response code="200">Bill by number of table</response>
-        /// <response code="400">Table doesnt exists or table has no bill</response>
+        /// <response code="400">Table doesnt exists or table have no bill</response>
         [HttpGet("{tableNumber}")]
         public ActionResult<Bill> GetBill(int tableNumber)
         {
             Table table = new() { Number = tableNumber };
             table = _tableService.GetByNumber(table);
             if (table == null)
-                return BadRequest($"Has no table with number {tableNumber}");
+                return BadRequest($"Have no table with number {tableNumber}");
 
             Bill bill = new() { Table = table };
             bill = _billService.GetByTableNumber(bill);
 
-            return bill != null ? Ok(bill) : BadRequest("Table has no one bill");
+            return bill != null ? Ok(bill) : BadRequest("Table have no one bill");
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Restaurant.API.Controllers
         /// </summary>
         /// <param name="tableNumber"></param>
         /// <response code="200">Bill finished successfully</response>
-        /// <response code="400">Has no bill to table number</response>
+        /// <response code="400">Have no bill to table number</response>
         [HttpPatch("{tableNumber}")]
         public ActionResult<Bill> CloseBill(int tableNumber)
         {
@@ -77,7 +77,7 @@ namespace Restaurant.API.Controllers
             table = _tableService.GetByNumber(table);
 
             if (table == null)
-                return BadRequest($"Has no table with number {tableNumber}");
+                return BadRequest($"Doesn't have table with number {tableNumber}");
 
             Bill bill = new() { Table = table };
 

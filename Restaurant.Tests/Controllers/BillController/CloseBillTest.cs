@@ -9,7 +9,7 @@ namespace Restaurant.Tests.Controllers.BillController
     public class CloseBillTest : BillBaseTest
     {
         [Fact]
-        public void ShouldReturnBadRequest_WhenHaveTable()
+        public void ShouldReturnBadRequest_WhenHaveNoTable()
         {
             _ = _tableService.Setup(_ => _.GetByNumber(It.IsAny<Table>())).Returns((Table)null);
 
@@ -20,7 +20,7 @@ namespace Restaurant.Tests.Controllers.BillController
 
             BadRequestObjectResult objectResult = Assert.IsType<BadRequestObjectResult>(result);
 
-            Assert.Equal($"Has no table with number {tableNumber}", objectResult.Value);
+            Assert.Equal($"Have no table with number {tableNumber}", objectResult.Value);
         }
 
         [Fact]

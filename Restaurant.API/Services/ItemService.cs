@@ -18,6 +18,7 @@ namespace Restaurant.API.Services
         public Item Insert(Item item)
         {
             _uow.Items.Add(item);
+            _uow.Save();
 
             return item;
         }
@@ -51,6 +52,9 @@ namespace Restaurant.API.Services
                 newItem.StockQuantity = item.StockQuantity;
             }
 
+            _uow.Items.Update(newItem);
+            _uow.Save();
+
             return newItem;
         }
 
@@ -64,6 +68,7 @@ namespace Restaurant.API.Services
             }
 
             _uow.Items.Remove(item);
+            _uow.Save();
         }
     }
 }

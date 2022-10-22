@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Restaurant.API.Context.Core;
-using Restaurant.API.Context.Core.Repositories;
 using Restaurant.API.Context.Persistence.Repositories;
+using Restaurant.API.Context.Core.Repositories;
+using Restaurant.API.Models;
 using System;
 
 namespace Restaurant.API.Context.Persistence
@@ -10,10 +11,15 @@ namespace Restaurant.API.Context.Persistence
     public class UnitOfWork : IUnitOfWork
     {
         private readonly RestaurantContext _context;
-
         private readonly DbContextOptions _dbContextOptions;
-
         private readonly string _connectionString;
+
+        public IRepository<Bill> Bills { get; private set; }
+        public IRepository<Waiter> Waiters { get; private set; }
+        public IRepository<Item> Items { get; private set; }
+        public IRepository<OrderItems> OrderItems { get; private set; }
+        public IRepository<Table> Tables { get; private set; }
+        public IRepository<Order> Orders { get; private set; }
 
         public UnitOfWork(IConfiguration configuration)
         {
@@ -21,22 +27,18 @@ namespace Restaurant.API.Context.Persistence
             _dbContextOptions = SqlServerDbContextOptionsExtensions.UseSqlServer(new DbContextOptionsBuilder(), _connectionString).Options;
             _context = new RestaurantContext(_dbContextOptions);
 
-            Bills = new BillRepository(_context);
-            Waiters = new WaiterRepository(_context);
-            Items = new ItemRepository(_context);
-            OrderItems = new OrderItemsRepository(_context);
-            Tables = new TableRepository(_context);
-            Orders = new OrderRepository(_context);
+            Bills = new Repository<Bill>(_context);
+            Waiters = new Repository<Waiter>(_context);
+            Items = new Repository<Item>(_context);
+            OrderItems = new Repository<OrderItems>(_context);
+            Tables = new Repository<Table>(_context);
+            Orders = new Repository<Order>(_context);
         }
 
-        public IBillRepository Bills { get; private set; }
-        public IWaiterRepository Waiters { get; private set; }
-        public IItemRepository Items { get; private set; }
-        public IOrderItemsRepository OrderItems { get; private set; }
-        public ITableRepository Tables { get; private set; }
-        public IOrderRepository Orders { get; private set; }
-
-        public void Attach<TEntity>(TEntity entity) where TEntity : class => _context.Set<TEntity>().Attach(entity);
+        public void Save()
+        {
+            _context.SaveChanges();
+        }
 
         public void Dispose()
         {

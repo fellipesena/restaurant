@@ -1,4 +1,5 @@
-﻿using Restaurant.API.Context.Core;
+﻿using System.Linq;
+using Restaurant.API.Context.Core;
 using Restaurant.API.Interfaces.Services;
 using Restaurant.API.Models;
 
@@ -9,7 +10,7 @@ namespace Restaurant.API.Services
         public readonly IUnitOfWork _uow;
         public BillService(IUnitOfWork uow) => _uow = uow;
 
-        public Bill GetByTableNumber(Bill bill) => _uow.Bills.GetBillByTableNumber(bill.Table.Number);
+        public Bill GetByTableNumber(Bill bill) => _uow.Bills.Find(_bill => _bill.Table.Number == bill.Table.Number).FirstOrDefault();
 
         public Bill StartNew(Bill bill)
         {
@@ -17,9 +18,11 @@ namespace Restaurant.API.Services
             bill.Value = 0;
 
             _uow.Bills.Add(bill);
-
-            _uow.Attach(bill.Table);
+            
             bill.Table.Available = false;
+
+            _uow.Tables.Update(bill.Table);
+            _uow.Save();
 
             return bill;
         }
@@ -33,6 +36,9 @@ namespace Restaurant.API.Services
 
             bill.Status = Enums.BillStatus.Closed;
             bill.Table.Available = true;
+
+            _uow.Bills.Update(bill);
+            _uow.Save();
 
             return bill;
         }

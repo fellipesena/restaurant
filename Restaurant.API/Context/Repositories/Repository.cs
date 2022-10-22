@@ -9,32 +9,38 @@ namespace Restaurant.API.Context.Persistence.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
-        protected readonly DbContext Context;
+        protected readonly DbContext _context;
 
-        public Repository(DbContext context) => Context = context;
+        protected readonly DbSet<TEntity> _dbSet;
 
-        public TEntity Get(int id) => Context.Set<TEntity>().Find(id);
-
-        public IEnumerable<TEntity> GetAll() => Context.Set<TEntity>().ToList();
-
-        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate) => Context.Set<TEntity>().Where(predicate);
-
-        public void Add(TEntity entity)
+        public Repository(DbContext context)
         {
-            _ = Context.Set<TEntity>().Add(entity);
-            _ = Context.SaveChanges();
+            _context = context;
+            _dbSet = context.Set<TEntity>();
         }
 
-        public void AddRange(IEnumerable<TEntity> entities)
+        public TEntity Get(int id) => _dbSet.Find(id);
+
+        public IEnumerable<TEntity> GetAll() => _dbSet.ToList();
+
+        public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate) => _dbSet.Where(predicate);
+
+        public void Add(TEntity entity) => _dbSet.Add(entity);
+
+        public void AddRange(IEnumerable<TEntity> entities) => _dbSet.AddRange(entities);
+
+        public void Update(TEntity entity)
         {
-            Context.Set<TEntity>().AddRange(entities);
-            _ = Context.SaveChanges();
+            _dbSet.Attach(entity);
+            _context.Entry(entity).State = EntityState.Modified;
         }
 
         public void Remove(TEntity entity)
         {
-            _ = Context.Set<TEntity>().Remove(entity);
-            _ = Context.SaveChanges();
-        }
+            if(_context.Entry(entity).State == EntityState.Detached)
+                _dbSet.Attach(entity);
+
+            _dbSet.Remove(entity);
+        } 
     }
 }

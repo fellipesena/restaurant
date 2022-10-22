@@ -27,6 +27,8 @@ namespace Restaurant.API.Services
                 itens.TotalValue = item.Value * itens.Quantity;
                 item.StockQuantity -= itens.Quantity;
 
+                _uow.Items.Update(item);
+
                 orderValue += itens.TotalValue;
             }
 
@@ -36,9 +38,11 @@ namespace Restaurant.API.Services
             order.TableId = order.Bill.TableId;
             order.DateTime = System.DateTime.Now;
 
+            _uow.Orders.Add(order);
+
             order.Bill.Value += orderValue;
 
-            _uow.Orders.Add(order);
+            _uow.Bills.Update(order.Bill);
 
             foreach (OrderItems itens in order.OrderItems)
             {
@@ -46,6 +50,8 @@ namespace Restaurant.API.Services
             }
 
             _uow.OrderItems.AddRange(order.OrderItems);
+
+            _uow.Save();
 
             return order;
         }

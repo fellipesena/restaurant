@@ -21,6 +21,7 @@ namespace Restaurant.API.Services
             }
 
             _uow.Tables.Add(table);
+            _uow.Save();
 
             return table;
         }
@@ -41,6 +42,7 @@ namespace Restaurant.API.Services
             }
 
             _uow.Tables.Remove(table);
+            _uow.Save();
         }
     }
 }

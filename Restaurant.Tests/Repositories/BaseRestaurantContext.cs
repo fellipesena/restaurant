@@ -13,9 +13,8 @@ namespace Restaurant.Tests.Repositories
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
 
-            RestaurantContext context = new(options);
-            _ = context.Database.EnsureCreated();
-            _context = context;
+            _context = new(options);
+            _ = _context.Database.EnsureCreated();
         }
     }
 }
