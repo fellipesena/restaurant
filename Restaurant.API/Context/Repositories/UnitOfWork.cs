@@ -1,12 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Restaurant.API.Context.Core;
-using Restaurant.API.Context.Persistence.Repositories;
-using Restaurant.API.Context.Core.Repositories;
 using Restaurant.API.Models;
 using System;
 
-namespace Restaurant.API.Context.Persistence
+namespace Restaurant.API.Context.Repositories
 {
     public class UnitOfWork : IUnitOfWork
     {

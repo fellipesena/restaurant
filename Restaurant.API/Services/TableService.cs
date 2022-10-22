@@ -1,4 +1,4 @@
-﻿using Restaurant.API.Context.Core;
+﻿using Restaurant.API.Context.Repositories;
 using Restaurant.API.Interfaces.Services;
 using Restaurant.API.Models;
 using System;

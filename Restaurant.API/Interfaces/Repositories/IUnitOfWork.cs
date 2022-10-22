@@ -1,8 +1,7 @@
-﻿using Restaurant.API.Context.Core.Repositories;
-using Restaurant.API.Models;
+﻿using Restaurant.API.Models;
 using System;
 
-namespace Restaurant.API.Context.Core
+namespace Restaurant.API.Context.Repositories
 {
     public interface IUnitOfWork : IDisposable
     {

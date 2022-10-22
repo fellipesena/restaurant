@@ -1,8 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Bogus;
-using Restaurant.API.Context.Core.Repositories;
-using Restaurant.API.Context.Persistence.Repositories;
+using Restaurant.API.Context.Repositories;
 using Restaurant.API.Models;
 using Xunit;
 
@@ -99,7 +98,7 @@ namespace Restaurant.Tests.Repositories
 
             decimal newValue = _faker.Random.Decimal();
             bill.Value = newValue;
-            
+
             _repository.Update(bill);
             _context.SaveChanges();
 

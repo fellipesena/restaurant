@@ -1,11 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Restaurant.API.Context.Core.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Restaurant.API.Context.Persistence.Repositories
+namespace Restaurant.API.Context.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {

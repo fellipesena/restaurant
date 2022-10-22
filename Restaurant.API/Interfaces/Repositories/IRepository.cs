@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq.Expressions;
 
-namespace Restaurant.API.Context.Core.Repositories
+namespace Restaurant.API.Context.Repositories
 {
     public interface IRepository<TEntity> where TEntity : class
     {
