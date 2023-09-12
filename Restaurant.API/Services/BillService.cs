@@ -7,15 +7,14 @@ namespace Restaurant.API.Services
 {
     public class BillService : IBillService
     {
-        public readonly IUnitOfWork _uow;
+        private readonly IUnitOfWork _uow;
         public BillService(IUnitOfWork uow) => _uow = uow;
 
         public Bill GetByTableNumber(Bill bill) => _uow.Bills.Find(_bill => _bill.Table.Number == bill.Table.Number).FirstOrDefault();
 
         public Bill StartNew(Bill bill)
         {
-            bill.Status = Enums.BillStatus.Openned;
-            bill.Value = 0;
+            bill.StartNew();
 
             _uow.Bills.Add(bill);
             
@@ -34,8 +33,7 @@ namespace Restaurant.API.Services
             if (bill == null)
                 return bill;
 
-            bill.Status = Enums.BillStatus.Closed;
-            bill.Table.Available = true;
+            bill.Close();
 
             _uow.Bills.Update(bill);
             _uow.Save();

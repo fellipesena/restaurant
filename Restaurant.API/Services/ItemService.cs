@@ -1,14 +1,17 @@
 ﻿using Restaurant.API.Context.Repositories;
+using Restaurant.API.Enums;
+using Restaurant.API.Exceptions;
 using Restaurant.API.Interfaces.Services;
 using Restaurant.API.Models;
-using System;
 using System.Collections.Generic;
 
 namespace Restaurant.API.Services
 {
     public class ItemService : IItemService
     {
-        public readonly IUnitOfWork _uow;
+        private readonly EntityType entityType = EntityType.Item;
+        private readonly IUnitOfWork _uow;
+
         public ItemService(IUnitOfWork uow) => _uow = uow;
 
         public Item Get(Item item) => _uow.Items.Get(item.Id);
@@ -28,29 +31,9 @@ namespace Restaurant.API.Services
             Item newItem = _uow.Items.Get(item.Id);
 
             if (newItem == null)
-            {
-                throw new Exception("Item not found");
-            }
-            if (!string.IsNullOrEmpty(item.Name) && item.Name != newItem.Name)
-            {
-                newItem.Name = item.Name;
-            }
-            if (!string.IsNullOrEmpty(item.Description) && item.Description != newItem.Description)
-            {
-                newItem.Description = item.Description;
-            }
-            if (!string.IsNullOrEmpty(item.Type) && item.Type != newItem.Type)
-            {
-                newItem.Type = item.Type;
-            }
-            if (item.Value != newItem.Value)
-            {
-                newItem.Value = item.Value;
-            }
-            if (item.StockQuantity != newItem.StockQuantity)
-            {
-                newItem.StockQuantity = item.StockQuantity;
-            }
+                throw new NotFoundException(entityType, item.Id.ToString());
+
+            newItem.SetPropertiesToUpdate(item);
 
             _uow.Items.Update(newItem);
             _uow.Save();
@@ -63,9 +46,7 @@ namespace Restaurant.API.Services
             item = Get(item);
 
             if (item == null)
-            {
-                throw new Exception("Item not found");
-            }
+                throw new NotFoundException(entityType, item.Id.ToString());
 
             _uow.Items.Remove(item);
             _uow.Save();

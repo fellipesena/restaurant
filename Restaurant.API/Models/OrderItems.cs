@@ -20,5 +20,12 @@ namespace Restaurant.API.Models
 
         public decimal TotalValue { get; set; }
         public string Comments { get; set; }
+
+        internal void StartNewOrderItem(decimal itemValue, int orderId)
+        {
+            UnitValue = itemValue;
+            TotalValue = itemValue * Quantity;
+            OrderId = orderId;
+        }
     }
 }

@@ -6,6 +6,15 @@ namespace Restaurant.API.Models
 {
     public class Order
     {
+        public Order(int waiterId, int billId, int tableId)
+        {
+            Value = 0;
+            TableId = tableId;
+            DateTime = DateTime.UtcNow;
+            WaiterId = waiterId;
+            BillId = billId;
+        }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
@@ -23,5 +32,10 @@ namespace Restaurant.API.Models
         public virtual IEnumerable<OrderItems> OrderItems { get; set; }
         public DateTime DateTime { get; set; }
         public decimal Value { get; set; }
+
+        internal void IncreaseTotalValue(decimal totalValue)
+        {
+            Value += totalValue;
+        }
     }
 }
